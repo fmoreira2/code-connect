@@ -8,19 +8,27 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  }, 
   "dependencies": {
+    "@prisma/client": "^6.4.1",
+    "next": "14.2.24",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.24"
+    "remark": "^15.0.1",
+    "remark-html": "^16.0.1",
+    "winston": "^3.17.0"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "postcss": "^8",
-    "tailwindcss": "^3.4.1",
     "eslint": "^8",
-    "eslint-config-next": "14.2.24"
+    "eslint-config-next": "14.2.24",
+    "postcss": "^8",
+    "prisma": "^6.4.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
