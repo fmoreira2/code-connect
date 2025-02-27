@@ -32,7 +32,7 @@ async function getPosts(page) {
 }
 
 export default async function Home({ searchParams }) {
-	const currentPage = searchParams?.page || 1;
+	const currentPage = parseInt(searchParams?.page || 1);
 	const { data: posts, prev, next } = await getPosts(currentPage);
 	return (
 		<main className={styles.grid}>
