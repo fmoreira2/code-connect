@@ -4,18 +4,31 @@ import styles from './page.module.css';
 import Link from 'next/link';
 import db from '@/prisma/db';
 
-async function getPosts(page) {
+async function getPosts(page, searchTerm) {
 	try {
+
+		const where = {
+			
+		}
+
+		if (searchTerm) {
+			where.title = {
+				contains: searchTerm,
+				mode: 'insensitive',
+			}
+		}
+
 		const take = 6;
 		const skip = (page - 1) * take;
 
 		const prev = page > 1 ? page - 1 : null;
-		const totalItems = await db.post.count();
+		const totalItems = await db.post.count({where});
 		const totalPages = Math.ceil(totalItems / take);
 		const next = page < totalPages ? page + 1 : null;
 		const posts = (await db.post.findMany({
 			take: take,
 			skip: skip,
+			where: where,
 			orderBy: {
 				createdAt: 'desc',
 			},
@@ -33,7 +46,8 @@ async function getPosts(page) {
 
 export default async function Home({ searchParams }) {
 	const currentPage = parseInt(searchParams?.page || 1);
-	const { data: posts, prev, next } = await getPosts(currentPage);
+	const searchTerm = searchParams?.q;
+	const { data: posts, prev, next } = await getPosts(currentPage, searchTerm);
 	return (
 		<main className={styles.grid}>
 			{posts.map((post) => (
@@ -45,14 +59,20 @@ export default async function Home({ searchParams }) {
 			<div className={styles.links}>
 				{prev && (
 					<Link
-						href={`/?page=${prev}`}
+						href={{
+							pathname: '/',
+							query: { page: prev, q: searchTerm },
+						}}
 						className={styles.button}>
 						Página Anterior
 					</Link>
 				)}
 				{next && (
 					<Link
-						href={`/?page=${next}`}
+						href={{
+							pathname: '/',
+							query: { page: next, q: searchTerm },
+						}}
 						className={styles.button}>
 						Próxima Página
 					</Link>
